@@ -26,7 +26,7 @@ def save_response(response , fichier: str = "cle_dict.json"):
 #characters : /api/characters
 #Version : /api/versions
 
-if __name__ == "__main__":
+def main():
     menu: int = -1
     
     while(menu<1 or menu>5):
@@ -50,7 +50,7 @@ if __name__ == "__main__":
             response = requests.get("https://dbd.tricky.lol/api/versions")
             file_name: str = "Versions.json"
         case _:
-            print("\nOk bah rien du coup")
+            print("Understandable, Have a nice day")
     
     if((menu>=1) and (menu<=4)):
         if(response.status_code == 200):
@@ -63,5 +63,6 @@ if __name__ == "__main__":
         else:
             print("pas de réponse :(\n code d'erreur :", end=" ")
             print(response.status_code)
-    else:
-        print("Understandable, Have a nice day")
+
+if __name__ == "__main__":
+    main()
