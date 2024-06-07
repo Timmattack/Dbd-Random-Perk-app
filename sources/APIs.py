@@ -23,12 +23,13 @@ def sauve_response(response , fichier: str = "cle_dict.json"):
 #Leaderboard pos : /api/leaderboardposition?steamid=76561199028517504
 #Version : /api/versions
 
-response = requests.get("https://dbd.tricky.lol/api/versions")
-print(response.status_code)
-if(response.status_code == 200):
-    print("Un résultat :D")
-    respJSON = response.json()
+if __name__ == "__main__":
+    response = requests.get("https://dbd.tricky.lol/api/versions")
+    print(response.status_code)
+    if(response.status_code == 200):
+        print("Un résultat :D")
+        respJSON = response.json()
     
-    sauve_response(respJSON, "version.json")
-    for k in respJSON.keys():
-        print(k)
+        sauve_response(respJSON, "version.json")
+        for k in respJSON.keys():
+            print(k)
