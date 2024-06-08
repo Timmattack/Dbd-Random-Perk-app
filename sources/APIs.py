@@ -11,9 +11,9 @@ print(response.status_code)
 if(response.status_code == 200):
     print(response.json())
 '''
-def save_response(response , fichier: str = "cle_dict.json"):
-    f = open(fichier, "w")
-    json.dump(response, f)
+def save_response(response , fichier: str = "file.json"):
+    with open(fichier, "w") as f:
+        json.dump(response, f)
 
 # Recherches guez
 #Random Perks : https://dbd.tricky.lol/api/randomperks
@@ -26,6 +26,36 @@ def save_response(response , fichier: str = "cle_dict.json"):
 #characters : /api/characters
 #Version : /api/versions
 
+#Vérifie le statut de la requête, et sauvegarde si les statut le permet
+def check_and_save(response, save_json: str) -> bool:
+    if(response.status_code != 200):
+        return False
+    else:
+        respJSON = response.json()
+        save_response(respJSON, save_json)
+        return True
+    
+
+# Sauvegarde dans un json le résultat de la requête
+# Renvoie Faux si il n'y a pas de réponse
+def get_perks(save_json: str = "../data/Perks.json") -> bool:
+    response = requests.get("https://dbd.tricky.lol/api/perks")
+    return check_and_save(response, save_json)
+
+def get_user_adepts(save_json: str = "../data/User_adepts.json", id: str = "76561199028517504") -> bool:
+    response = requests.get(f"https://dbd.tricky.lol/api/playeradepts?steamid={id}")
+    return check_and_save(response, save_json)
+
+def get_characters(save_json: str = "../data/Characters.json") -> bool:
+    response = requests.get("https://dbd.tricky.lol/api/characters")
+    return check_and_save(response, save_json)
+
+def get_version(save_json: str = "../data/Version.json") -> bool:
+    response = requests.get("https://dbd.tricky.lol/api/versions")
+    return check_and_save(response, save_json)
+
+
+
 def main():
     menu: int = -1
     
@@ -35,34 +65,26 @@ def main():
     
     match menu:
         case 1:
-            response = requests.get("https://dbd.tricky.lol/api/perks")
-            file_name: str = "Perks.json"
-        
+            b = get_perks()
+            
         case 2:
-            response = requests.get("https://dbd.tricky.lol/api/playeradepts?steamid=76561199028517504")
-            file_name: str = "User_adepts.json"
-        
+            b = get_user_adepts()
+            
         case 3:
-            response = requests.get("https://dbd.tricky.lol/api/characters")
-            file_name: str = "Characters.json"
+            b = get_characters()
         
         case 4:
-            response = requests.get("https://dbd.tricky.lol/api/versions")
-            file_name: str = "Versions.json"
+            b = get_version()
+            
         case _:
             print("Understandable, Have a nice day")
+            b = True
     
-    if((menu>=1) and (menu<=4)):
-        if(response.status_code == 200):
-            respJSON = response.json()
+    if(b):
+        print("Ok")
+    else:
+        print("Nok")
     
-            save_response(respJSON, file_name)
-            print(f"Résultats sauvegardés dans {file_name}")
-            for k in respJSON.keys():
-                print(k)
-        else:
-            print("pas de réponse :(\n code d'erreur :", end=" ")
-            print(response.status_code)
 
 if __name__ == "__main__":
     main()
