@@ -68,6 +68,9 @@ def main():
             b = get_perks()
             
         case 2:
+    #Bjoureeeee: "76561199024311024"
+    #Turtle: "76561198872214345"
+    #Miel: "76561198365338996"
             b = get_user_adepts()
             
         case 3:
@@ -79,7 +82,7 @@ def main():
         case _:
             print("Understandable, Have a nice day")
             b = True
-    
+
     if(b):
         print("Ok")
     else:
