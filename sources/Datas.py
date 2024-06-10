@@ -7,10 +7,13 @@ def charge_file(dict, fichier: str):
         dict[k] = v
     
 
-def cool_print(dict):
+def cool_print_dict(dict):
     for k in dict:
         print(f"{k}: {dict[k]}")
 
+def cool_print_list(list):
+    for i in list:
+        print(i)
 
 '''
 Characters
@@ -23,7 +26,7 @@ Perks
 def cross_Pid_Pname(dict1, dict2):
     for k in dict1:
         for i in range(3):
-            dict1[k]["perks"][i] = dict2[dict1[k]["perks"][i]]["name"]
+            dict1[k][i] = dict2[dict1[k][i]]["name"]
 
 
 def main():
@@ -35,28 +38,25 @@ def main():
     On créé le dictionnaire des survivants avec leurs 3 compétences
         Puis celui des tueurs
     """
-    Survs_X_3Perks = { k:{"name": v["name"], "perks": v["perks"]} for k,v in Characters.items() if (v["role"] == "survivor")}
-    Killer_X_3Perks = { k:{"name": v["name"], "perks": v["perks"]} for k,v in Characters.items() if (v["role"] == "killer")}
-    
-    #cool_print(Survs_X_3Perks)
-    #cool_print(Killer_X_3Perks)
+    Survs_X_3Perks = { v["name"]: v["perks"] for k,v in Characters.items() if (v["role"] == "survivor")}
+    Killer_X_3Perks = { v["name"]: v["perks"] for k,v in Characters.items() if (v["role"] == "killer")}
     
     
     Perks = {}
     charge_file(Perks, "../data/Perks.json")
     
-    Surv_null = { k:{"name": v["name"] } for k,v in Perks.items() if ((v["role"] == "survivor") and (v["character"] is None)) }
-    Killer_null = { k:{"name": v["name"] } for k,v in Perks.items() if ((v["role"] == "killer") and (v["character"] is None)) }
-    
-    
+    Surv_null = [ v["name"] for k,v in Perks.items() if ((v["role"] == "survivor") and (v["character"] is None)) ]
+    Killer_null = [ v["name"] for k,v in Perks.items() if ((v["role"] == "killer") and (v["character"] is None)) ]
     
     cross_Pid_Pname(Survs_X_3Perks, Perks)
     cross_Pid_Pname(Killer_X_3Perks, Perks)
     
-    cool_print(Survs_X_3Perks)
-    cool_print(Killer_X_3Perks)
-    #cool_print(Surv_null)
-    #cool_print(Killer_null)
+    print("\nSurvs perks:\n\n")
+    cool_print_dict(Survs_X_3Perks)
+    cool_print_list(Surv_null)
+    print("\nKillers perks:\n\n")
+    cool_print_dict(Killer_X_3Perks)
+    cool_print_list(Killer_null)
     
 
 if __name__ == "__main__":
