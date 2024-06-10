@@ -17,7 +17,19 @@ def show_checked():
 
 # Create the main window
 root = tk.Tk()
-root.title("Checkbox Example")
+root.title("Chaos mode, but the mode isn't live")
+root.iconbitmap('../tkinter/icone/skull.ico')
+
+
+root.geometry("800x600")
+root.resizable(False, False)
+
+root.update_idletasks()
+width = root.winfo_screenwidth() // 2 + root.winfo_screenwidth() // 4
+height = root.winfo_screenheight() // 2 + root.winfo_screenheight() // 4
+x = (root.winfo_screenwidth() // 2) - (width // 2)
+y = (root.winfo_screenheight() // 2) - (height // 2)
+root.geometry('{}x{}+{}+{}'.format(width, height, x, y))
 
 # Variables to hold the state of the checkboxes
 var1 = tk.BooleanVar()
