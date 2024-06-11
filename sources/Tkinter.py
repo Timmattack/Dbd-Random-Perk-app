@@ -1,54 +1,65 @@
 import tkinter as tk
 from tkinter import messagebox
 
+NUMBER_OF_BUTTON: int = 40
+
+checkable_vars = []
+
 def show_checked():
+    global checkable_vars
     checked_items = []
-    if var1.get():
-        checked_items.append("Option 1")
-    if var2.get():
-        checked_items.append("Option 2")
-    if var3.get():
-        checked_items.append("Option 3")
-    
+    for i in range(NUMBER_OF_BUTTON):
+        if checkable_vars[i].get():
+            checked_items.append(f"Option {i}")
+
     if checked_items:
         messagebox.showinfo("Checked Items", "You checked: " + ", ".join(checked_items))
     else:
         messagebox.showinfo("Checked Items", "No options were checked.")
 
-# Create the main window
-root = tk.Tk()
-root.title("Chaos mode, but the mode isn't live")
-root.iconbitmap('../tkinter/icone/skull.ico')
 
+def main():
+    # Création de la fenêtre, et de sa taille
+    root = tk.Tk()
+    root.title("Chaos mode, but the mode isn't live")
+    root.iconbitmap('../tkinter/icone/skull.ico')
+    root.configure(background='#7d8cd2')
 
-root.geometry("800x600")
-root.resizable(False, False)
+    root.geometry("800x600")
+    root.resizable(False, False)
 
-root.update_idletasks()
-width = root.winfo_screenwidth() // 2 + root.winfo_screenwidth() // 4
-height = root.winfo_screenheight() // 2 + root.winfo_screenheight() // 4
-x = (root.winfo_screenwidth() // 2) - (width // 2)
-y = (root.winfo_screenheight() // 2) - (height // 2)
-root.geometry('{}x{}+{}+{}'.format(width, height, x, y))
+    root.update_idletasks()
+    width = root.winfo_screenwidth() // 2 + root.winfo_screenwidth() // 4
+    height = root.winfo_screenheight() // 2 + root.winfo_screenheight() // 4
+    x = (root.winfo_screenwidth() // 2) - (width // 2)
+    y = (root.winfo_screenheight() // 2) - (height // 2)
+    root.geometry('{}x{}+{}+{}'.format(width, height, x, y))
+    
+    #Organisation de la taille des grilles
+    for i in range(NUMBER_OF_BUTTON//4+1):
+        root.grid_rowconfigure(i, weight=1)
+    for i in range(4):
+        root.grid_columnconfigure(i, weight=1)
+    
+    #Création des boutons
+    global checkable_vars
+    for i in range(NUMBER_OF_BUTTON):
+        checkable_vars.append(tk.BooleanVar())
 
-# Variables to hold the state of the checkboxes
-var1 = tk.BooleanVar()
-var2 = tk.BooleanVar()
-var3 = tk.BooleanVar()
+    checkboxes = []
+    for i in range(NUMBER_OF_BUTTON):
+        checkboxes.append(tk.Checkbutton(root, text=f"Option {i}", variable = checkable_vars[i]))
 
-# Create checkboxes
-checkbox1 = tk.Checkbutton(root, text="Option 1", variable=var1)
-checkbox2 = tk.Checkbutton(root, text="Option 2", variable=var2)
-checkbox3 = tk.Checkbutton(root, text="Option 3", variable=var3)
+    btn_show = tk.Button(root, text="Show Checked Options", command=show_checked)
+    
+    #Placement des boutons
+    for i in range(NUMBER_OF_BUTTON):
+        checkboxes[i].grid(row=i//4, column=i%4)
+    
+    btn_show.grid(row=NUMBER_OF_BUTTON//4 + 1 )
 
-# Create a button to show the checked options
-btn_show = tk.Button(root, text="Show Checked Options", command=show_checked)
+    # Start the main event loop
+    root.mainloop()
 
-# Layout the widgets
-checkbox1.pack()
-checkbox2.pack()
-checkbox3.pack()
-btn_show.pack()
-
-# Start the main event loop
-root.mainloop()
+if __name__ == "__main__":
+    main()
