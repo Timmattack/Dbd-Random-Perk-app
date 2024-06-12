@@ -28,7 +28,10 @@ def cross_id_name(dict1, dict2):
         for i in range(3):
             dict1[k][i] = dict2[dict1[k][i]]["name"]
 
-
+"""
+Créé un dictionnaire contenant les compétences de chaque survivants, et chaque tueurs
+    Informations extraites de "Characters.json" et "Perks.json"
+"""
 def Init_Perks():
     
     Surv_Perks: dict = {}
