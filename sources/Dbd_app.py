@@ -1,17 +1,13 @@
-import app_setup
+from app_setup import Application
 from Datas import Init_Perks, cool_print_dict
 
 
 def main():
     All_Perks = Init_Perks()
     
-    Survs_dict = {k:0 for k in All_Perks["survivors"]}
-    del Survs_dict["All"]
+    app = Application(All_Perks)
     
-    Killers_dict = {k:0 for k in All_Perks["killers"]}
-    del Killers_dict["All"]
-    
-    app_setup.Launch_app(Survs_dict)
+    app.mainloop()
     
     
 
