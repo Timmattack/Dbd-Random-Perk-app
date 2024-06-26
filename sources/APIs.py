@@ -36,7 +36,7 @@ def save_response(response , fichier: str = "file.json"):
 #characters : /api/characters
 #Version : /api/versions
 
-#Vérifie le statut de la requête, et sauvegarde si les statut le permet
+#Vérifie le statut de la requête, et sauvegarde si le statut le permet
 def check_and_save(response, save_json: str) -> bool:
     if(response.status_code != 200):
         return False
@@ -75,23 +75,23 @@ def is_different_live_version(local_version_path: str = "../data/local_Version.j
     
     return (local_version["perks"]["version"] != live_version["perks"]["version"])
 
-def update_all_data() -> int:
+def update_all_data(live_version_path: str, local_version_path: str, perks_path: str, characters_path: str) -> int:
     
-    get_version()
+    get_version(live_version_path)
     
-    if(is_different_live_version()):
+    if(is_different_live_version(local_version_path, live_version_path)):
         try:
-            os.remove("../data/local_Version.json")
+            os.remove(local_version_path)
         except PermissionError:
             return 1
         except Exception as e:
             return 2
         
-        os.rename("../data/live_Version.json", "../data/local_Version.json")
+        os.rename(live_version_path, local_version_path)
         
-        if(not get_perks()):
+        if(not get_perks(perks_path)):
             return 3
-        if(not get_characters()):
+        if(not get_characters(characters_path)):
             return 4
     
     return 0
