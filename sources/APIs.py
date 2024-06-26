@@ -2,6 +2,7 @@
 import requests
 import json
 import string
+import os
 
 '''
 https://dbd.tricky.lol/apidocs
@@ -11,9 +12,18 @@ print(response.status_code)
 if(response.status_code == 200):
     print(response.json())
 '''
+
+def charge_file(json_dict: dict, fichier: str):
+    with open(fichier, "r") as f:
+        tmp_dict = json.load(f)
+    
+    json_dict.update(tmp_dict)
+
+
 def save_response(response , fichier: str = "file.json"):
     with open(fichier, "w") as f:
         json.dump(response, f)
+
 
 # Recherches guez
 #Random Perks : https://dbd.tricky.lol/api/randomperks
@@ -50,13 +60,55 @@ def get_characters(save_json: str = "../data/Characters.json") -> bool:
     response = requests.get("https://dbd.tricky.lol/api/characters")
     return check_and_save(response, save_json)
 
-def get_version(save_json: str = "../data/Version.json") -> bool:
+def get_version(save_json: str = "../data/live_Version.json") -> bool:
     response = requests.get("https://dbd.tricky.lol/api/versions")
     return check_and_save(response, save_json)
 
 
 
+def is_different_live_version(local_version_path: str = "../data/local_Version.json", live_version_path: str = "../data/live_Version.json") -> bool:
+    local_version: dict = {}
+    live_version: dict = {}
+    
+    charge_file(local_version, local_version_path)
+    charge_file(live_version, live_version_path)
+    
+    return (local_version["perks"]["version"] != live_version["perks"]["version"])
+
+def update_all_data() -> int:
+    
+    get_version()
+    
+    if(is_different_live_version()):
+        try:
+            os.remove("../data/local_Version.json")
+        except PermissionError:
+            return 1
+        except Exception as e:
+            return 2
+        
+        os.rename("../data/live_Version.json", "../data/local_Version.json")
+        
+        if(not get_perks()):
+            return 3
+        if(not get_characters()):
+            return 4
+    
+    return 0
+
+
+
+
+
+
+
+
+
+
 def main():
+    print(update_all_data())
+    
+    """
     menu: int = -1
     
     while(menu<1 or menu>5):
@@ -87,7 +139,7 @@ def main():
         print("Ok")
     else:
         print("Nok")
-    
+    """
 
 if __name__ == "__main__":
     main()
