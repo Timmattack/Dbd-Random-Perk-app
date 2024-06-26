@@ -1,10 +1,10 @@
 import json
 
-def charge_file(dict: dict, fichier: str):
+def charge_file(json_dict: dict, fichier: str):
     with open(fichier, "r") as f:
         tmp_dict = json.load(f)
-    for k,v in tmp_dict.items():
-        dict[k] = v
+    
+    json_dict.update(tmp_dict)
     
 
 def cool_print_dict(dict):
