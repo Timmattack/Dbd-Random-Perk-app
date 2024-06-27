@@ -75,7 +75,10 @@ def is_different_live_version(local_version_path: str = "../data/local_Version.j
     
     return (local_version["perks"]["version"] != live_version["perks"]["version"])
 
-def update_all_data(live_version_path: str, local_version_path: str, perks_path: str, characters_path: str) -> int:
+def update_all_data(live_version_path: str = "../data/live_Version.json", 
+                    local_version_path: str = "../data/local_Version.json", 
+                    perks_path: str = "../data/Perks.json", 
+                    characters_path: str = "../data/Characters.json") -> int:
     
     get_version(live_version_path)
     
@@ -106,9 +109,8 @@ def update_all_data(live_version_path: str, local_version_path: str, perks_path:
 
 
 def main():
-    print(update_all_data())
-    
-    """
+    #print(update_all_data())
+
     menu: int = -1
     
     while(menu<1 or menu>5):
@@ -123,6 +125,7 @@ def main():
     #Bjoureeeee: "76561199024311024"
     #Turtle: "76561198872214345"
     #Miel: "76561198365338996"
+    #Niglomancien: "76561199008900338"
             b = get_user_adepts()
             
         case 3:
@@ -139,7 +142,7 @@ def main():
         print("Ok")
     else:
         print("Nok")
-    """
+
 
 if __name__ == "__main__":
     main()

@@ -32,14 +32,14 @@ def cross_id_name(dict1, dict2):
 Créé un dictionnaire contenant les compétences de chaque survivants, et chaque tueurs
     Informations extraites de "Characters.json" et "Perks.json"
 """
-def Init_Perks():
+def Init_Perks(characters_path: str = "../data/Characters.json", perks_path: str = "../data/Perks.json"):
     
     Surv_Perks: dict = {}
     Killer_Perks: dict = {}
     
     # un dict pour les Persos: leurs perks
     Characters: dict = {}
-    charge_file(Characters, "../data/Characters.json")
+    charge_file(Characters, characters_path)
     
     
     #On créé le dictionnaire des survivants avec leurs 3 compétences
@@ -48,7 +48,7 @@ def Init_Perks():
     Killer_Perks = { v["name"]: v["perks"] for k,v in Characters.items() if (v["role"] == "killer")}
     
     Perks = {}
-    charge_file(Perks, "../data/Perks.json")
+    charge_file(Perks, perks_path)
     
     
     #Certaines compétences ne sont pas nomées correctement, On va chercher leurs noms dans 'Perks.json' et les remplacers

@@ -69,7 +69,7 @@ class Application(tk.Tk):
         
         #Création de la fenêtre et sa taille
         self.title("Chaos mode, but the mode isn't live")
-        self.iconbitmap('../tkinter/icone/skull.ico')
+        self.iconbitmap('tkinter/icone/skull.ico')
         self.configure(background='#7d8cd2')
         
         self.geometry("800x600")
@@ -143,7 +143,7 @@ class Application(tk.Tk):
     def clear_content(self):
         for widget in self.winfo_children():
             widget.destroy()
-    
+
     def reset_grid_config(self):
         # Réinitialiser les configurations de grid
         for i in range(self.grid_size()[1]):  # Réinitialiser les lignes
