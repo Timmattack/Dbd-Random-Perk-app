@@ -23,8 +23,8 @@ def main():
             print("Les personnages n'ont pas pu être récupérés")
         case _:
             print("All Ok")
-        
-        
+
+
     All_Perks = Init_Perks("data/Characters.json", "data/Perks.json")
     
     app = Application(All_Perks)
