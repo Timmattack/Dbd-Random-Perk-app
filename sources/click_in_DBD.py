@@ -64,16 +64,21 @@ def equip_perk_i(i: int, perk: str):
 
 
 def do_the_thing(perks_array: list):
-    open_Dbd()
-    time.sleep(1)
     
-    click_perks_window()
-    time.sleep(1)
-    
-    
-    for i, perk in enumerate(perks_array):
-        equip_perk_i(i, perk)
-
+    try:
+        open_Dbd()
+        time.sleep(1)
+        
+        click_perks_window()
+        time.sleep(1)
+        
+        
+        for i, perk in enumerate(perks_array):
+            equip_perk_i(i, perk)
+    except KeyboardInterrupt:
+        print("arrêt de la procédure")
+    except Exception:
+        print(f"{Exception = }")
 
 def main():
     
@@ -81,10 +86,9 @@ def main():
         print("Dbd n'est pas ouvert")
     else:
         print("Ctrl-C pour arrêtter")
-        try:
-            do_the_thing(["Balanced landing", "Deja vu", "Botany knowledge", "Bond"])
-        except KeyboardInterrupt:
-            print("Vous avez stoppé le processus")
+        
+        do_the_thing(["Balanced landing", "Deja vu", "Botany knowledge", "Bond"])
+
 
 
     
