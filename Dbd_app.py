@@ -27,7 +27,7 @@ def main():
 
     All_Perks = Init_Perks("data/Characters.json", "data/Perks.json")
     
-    app = Application(All_Perks)
+    app = Application(All_Perks, "tkinter/icone/skull.ico", {"survivor": "tkinter/Survivor_options.txt", "killer": "tkinter/Killer_options.txt"})
     
     app.mainloop()
     
