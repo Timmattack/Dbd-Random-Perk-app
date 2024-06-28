@@ -12,6 +12,7 @@ def make_dict_checkable_vars(Role_Perks: dict):
     
     return checkable_vars
 
+
 #On va chercher à générer la liste des perks possédées
 def get_checked(checkable_vars: dict):
     checked_items = []
@@ -20,6 +21,7 @@ def get_checked(checkable_vars: dict):
             checked_items.append(f"{k}")
     
     return checked_items
+
 
 def build_checked_perks(checked_items, Role_Perks: dict):
     checked_perks = [ perk
@@ -31,6 +33,7 @@ def build_checked_perks(checked_items, Role_Perks: dict):
         checked_perks.append(perk)
     
     return checked_perks
+
 
 #On choisit 4 compétences
 def place_i_end_list(i, L):
@@ -49,6 +52,7 @@ def choose_4_perks(checked_perks: list[str]):
     
     return checked_perks[-4::]
 
+
 def show_random_perks(checkable_vars: dict, Role_perks):
     checked_items = get_checked(checkable_vars)
     
@@ -57,19 +61,43 @@ def show_random_perks(checkable_vars: dict, Role_perks):
     the_perks = choose_4_perks(checked_perks)
     
     messagebox.showinfo("Vos compétences ce match", ", ".join(the_perks))
-    
+
+
+def save_checked(checkable_vars, filename="../tkinter/Survivor_options.txt"):
+    with open(filename, "w") as file:
+        for name, var in checkable_vars.items():
+            if var.get():
+                file.write(name + "\n")
+    messagebox.showinfo("Sauvegarde", "Vos préférences sont sauvegardées")
+
+
+def load_checked(checkable_vars, filename="../tkinter/Survivor_options.txt"):
+    try:
+        with open(filename, "r") as file:
+            checked_options = file.read().splitlines()
+            for name in checkable_vars:
+                if name in checked_options:
+                    checkable_vars[name].set(True)
+                else:
+                    checkable_vars[name].set(False)
+    except FileNotFoundError:
+        messagebox.showwarning("Aïe", "Pas de sauvegarde trouvée.")
+
 
 class Application(tk.Tk):
-    def __init__(self, All_Perks):
+    def __init__(self, All_Perks, icon_path = "../tkinter/icone/skull.ico", saves_path = {"survivor": "../tkinter/Survivor_options.txt", "killer": "../tkinter/Killer_options.txt"}):
         super().__init__()
         
         #stock All_perks
         self.surv_perks = All_Perks["survivors"]
         self.killer_perks = All_Perks["killers"]
         
+        self.survivor_save_path = saves_path["survivor"]
+        self.killer_save_path = saves_path["killer"]
+        
         #Création de la fenêtre et sa taille
         self.title("Chaos mode, but the mode isn't live")
-        self.iconbitmap('tkinter/icone/skull.ico')
+        self.iconbitmap(icon_path)
         self.configure(background='#7d8cd2')
         
         self.geometry("800x600")
@@ -101,20 +129,20 @@ class Application(tk.Tk):
         #Première page de choix du rôle        
         tk.Label(self, text="Choisissez votre rôle", font=("Arial", 24), bg="#7d8cd2").grid(row=0, column=1, columnspan=2)
         
-        self.button1 = tk.Button(self, text="Survivant", font=("Arial", 24), command=lambda: self.role_window(self.surv_perks))
+        self.button1 = tk.Button(self, text="Survivant", font=("Arial", 24), command=lambda: self.role_window(self.surv_perks, self.survivor_save_path))
         self.button1.grid(row=1, column=1, sticky='nsew', padx=5)
         
-        self.button2 = tk.Button(self, text="Tueur", font=("Arial", 24), command=lambda: self.role_window(self.killer_perks))
+        self.button2 = tk.Button(self, text="Tueur", font=("Arial", 24), command=lambda: self.role_window(self.killer_perks, self.killer_save_path))
         self.button2.grid(row=1, column=2, sticky='nsew', padx=5)
 
-    def role_window(self, role_perks):
+    def role_window(self, role_perks, save_path):
         self.clear_content()
         self.reset_grid_config()
         
         checkable_vars = make_dict_checkable_vars(role_perks)
-        self.make_checkables_window(checkable_vars, role_perks)
+        self.make_checkables_window(checkable_vars, role_perks, save_path)
     
-    def make_checkables_window(self, checkable_vars, role_perks):
+    def make_checkables_window(self, checkable_vars, role_perks, save_path):
         the_len: int = len(checkable_vars)
         
         #Configuration de la grille
@@ -124,8 +152,11 @@ class Application(tk.Tk):
         self.grid_columnconfigure(0, weight=1)
         for i in range(1,5):
             self.grid_columnconfigure(i, weight=2)
-    
-        #Création des checkbox
+        
+        
+        
+        #Création des checkbox, et chargement de la sauvegarde
+        load_checked(checkable_vars, save_path)
         checkboxes = []
         for k in checkable_vars:
             checkboxes.append(tk.Checkbutton(self, text=f"{k}", variable = checkable_vars[k], bg="#7d8cd2"))
@@ -135,9 +166,11 @@ class Application(tk.Tk):
             checkboxes[i].grid(row=i//4, column=i%4+1)
     
         btn_show = tk.Button(self, text="Alors, quelles compétences ?", command=lambda: show_random_perks(checkable_vars, role_perks), bg="#955555")
+        btn_save = tk.Button(self, text="Sauvegardez vos cases cochées", command=lambda: save_checked(checkable_vars, save_path) ,bg="#008000")
         btn_back = tk.Button(self, text="Retour", command=self.show_main_page)
         
-        btn_show.grid(row=the_len//4 + 1 )
+        btn_show.grid(row=the_len//4 + 1, column=0)
+        btn_save.grid(row=the_len//4 + 1, column=1)
         btn_back.grid(row=0, column=0)
 
     def clear_content(self):
