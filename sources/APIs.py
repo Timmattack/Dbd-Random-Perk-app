@@ -13,13 +13,14 @@ if(response.status_code == 200):
     print(response.json())
 '''
 
+# Charge un dictionnaire depuis un .json
 def charge_file(json_dict: dict, fichier: str):
     with open(fichier, "r") as f:
         tmp_dict = json.load(f)
     
     json_dict.update(tmp_dict)
 
-
+# écrit un dictionnaire dans un .json
 def save_response(response , fichier: str = "file.json"):
     with open(fichier, "w") as f:
         json.dump(response, f)
@@ -65,7 +66,8 @@ def get_version(save_json: str = "../data/live_Version.json") -> bool:
     return check_and_save(response, save_json)
 
 
-
+# Renvoie True si la version de l'app (local) est différente de la version du jeu (live)
+# Faux sinon
 def is_different_live_version(local_version_path: str = "../data/local_Version.json", live_version_path: str = "../data/live_Version.json") -> bool:
     local_version: dict = {}
     live_version: dict = {}
@@ -75,6 +77,8 @@ def is_different_live_version(local_version_path: str = "../data/local_Version.j
     
     return (local_version["perks"]["version"] != live_version["perks"]["version"])
 
+
+# Fait les requêtes nécassaires pour mettre à jour les données, et les &crits dans des .json
 def update_all_data(live_version_path: str = "../data/live_Version.json", 
                     local_version_path: str = "../data/local_Version.json", 
                     perks_path: str = "../data/Perks.json", 
