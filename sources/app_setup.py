@@ -95,7 +95,7 @@ class CustomDialog(simpledialog.Dialog):
 
 
 def save_checked(checkable_vars, filename="../tkinter/Survivor_options.txt"):
-        with open(filename, "w") as file:
+        with open(filename, mode="w", encoding='utf-8') as file:
             for name, var in checkable_vars.items():
                 if var.get():
                     file.write(name + "\n")
@@ -104,7 +104,7 @@ def save_checked(checkable_vars, filename="../tkinter/Survivor_options.txt"):
 
 def load_checked(checkable_vars, filename="../tkinter/Survivor_options.txt"):
         try:
-            with open(filename, "r") as file:
+            with open(filename, mode="r", encoding='utf-8') as file:
                 checked_options = file.read().splitlines()
                 for name in checkable_vars:
                     if name in checked_options:
