@@ -7,8 +7,7 @@ from random import randint, seed
 
 from click_in_DBD import do_the_thing
 
-seed()
-
+# Construit le dictionnaire des bools, stockant le résultat des cases cochées
 def make_dict_checkable_vars(Role_Perks: dict):
     checkable_vars = {k:tk.BooleanVar() for k in Role_Perks}
     del checkable_vars["All"]
@@ -16,7 +15,7 @@ def make_dict_checkable_vars(Role_Perks: dict):
     return checkable_vars
 
 
-#On va chercher à générer la liste des perks possédées
+# Génère la liste des perks possédées, à partir des cases cochées
 def get_checked(checkable_vars: dict):
     checked_items = []
     for k in checkable_vars:
@@ -25,7 +24,7 @@ def get_checked(checkable_vars: dict):
     
     return checked_items
 
-
+# Renvoie la liste des compétences possédées par le joueur
 def build_checked_perks(checked_items, Role_Perks: dict):
     checked_perks = [ perk
         for k in checked_items
@@ -38,7 +37,7 @@ def build_checked_perks(checked_items, Role_Perks: dict):
     return checked_perks
 
 
-#On choisit 4 compétences
+#On choisit 4 compétences au hasard
 def place_i_end_list(i, L, L_length):
     if(i<L_length):
         p = L[i]
@@ -54,7 +53,7 @@ def choose_4_perks(checked_perks: list[str]):
     
     return checked_perks[-4::]
 
-
+# Boîte de dialogue personnalisée
 class CustomDialog(simpledialog.Dialog):
     def __init__(self, parent, the_perks, title=None):
         self.result = None
@@ -65,17 +64,19 @@ class CustomDialog(simpledialog.Dialog):
         self.attributes("-topmost", True)
         self.after_idle(self.attributes, '-topmost', False)
         """
-        
+
+    
     def body(self, master):
         tk.Label(master, text=f"Vos compétences aléatoires:{", ".join(self.perks)}").grid(row=0, column=0, padx=10, pady=10)
         return None  # Initial focus
 
+    # Boîte de dialogue 
     def buttonbox(self):
         box = tk.Frame(self)
 
         tk.Button(box, text="Annuler", width=10, command=self.cancel).pack(side=tk.LEFT, padx=5, pady=5)
         tk.Button(box, text="Relancer", width=10, command=self.reroll, default=tk.ACTIVE).pack(side=tk.LEFT, padx=5, pady=5)
-        tk.Button(box, text="Équiper ces compétences", width=10, command=self.equip_perks).pack(side=tk.LEFT, padx=5, pady=5)
+        tk.Button(box, text="Équiper ces compétences", width=20, command=self.equip_perks).pack(side=tk.LEFT, padx=5, pady=5)
 
         self.bind("<Escape>", self.cancel)
 
@@ -94,6 +95,7 @@ class CustomDialog(simpledialog.Dialog):
         self.destroy()
 
 
+# Sauvegarde les Personnages checkés
 def save_checked(checkable_vars, filename="../tkinter/Survivor_options.txt"):
         with open(filename, mode="w", encoding='utf-8') as file:
             for name, var in checkable_vars.items():
@@ -102,6 +104,7 @@ def save_checked(checkable_vars, filename="../tkinter/Survivor_options.txt"):
         messagebox.showinfo("Sauvegarde", "Vos préférences sont sauvegardées")
 
 
+# Charge les personnages checkés
 def load_checked(checkable_vars, filename="../tkinter/Survivor_options.txt"):
         try:
             with open(filename, mode="r", encoding='utf-8') as file:
@@ -114,9 +117,12 @@ def load_checked(checkable_vars, filename="../tkinter/Survivor_options.txt"):
         except FileNotFoundError:
             messagebox.showwarning("Aïe", "Pas de sauvegarde trouvée.")
 
-
+# Application principale
 class Application(tk.Tk):
-    def __init__(self, All_Perks, icon_path = "../tkinter/icone/skull.ico", saves_path = {"survivor": "../tkinter/Survivor_options.txt", "killer": "../tkinter/Killer_options.txt"}):
+    def __init__(self, All_Perks, 
+                    icon_path = "../tkinter/icone/skull.ico", 
+                    saves_path = {"survivor": "../tkinter/Survivor_options.txt", "killer": "../tkinter/Killer_options.txt"}):
+
         super().__init__()
         
         #stock All_perks
@@ -243,6 +249,7 @@ class Application(tk.Tk):
 
 
 def main():
+    seed()
     #Dict qui contiendra le nom des survs
     All_Perks = {
         "survivors": {
