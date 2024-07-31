@@ -1,12 +1,13 @@
 import json
 
+# Charge un dictionnaire depuis un .json
 def charge_file(json_dict: dict, fichier: str):
     with open(fichier, "r") as f:
         tmp_dict = json.load(f)
     
     json_dict.update(tmp_dict)
-    
 
+# Pour Debug les gros dictionnaires
 def cool_print_dict(dict):
     for k in dict:
         print(f"{k}: {dict[k]}")
@@ -20,6 +21,7 @@ Perks
 "le num de la perk": {"categories": [""], "name": "", "role": "", "character": int/null, "teachable": 40, "image": ".png"}
 '''
 
+# Organisation des données
 """
 Pour chaque identifiant de fonction, on retrouve son nom
 """
@@ -28,6 +30,7 @@ def cross_id_name(dict1, dict2):
         for i in range(3):
             dict1[k][i] = dict2[dict1[k][i]]["name"]
 
+#Organisation des données 2
 """
 Créé un dictionnaire contenant les compétences de chaque survivants, et chaque tueurs
     Informations extraites de "Characters.json" et "Perks.json"
